@@ -1,0 +1,29 @@
+networks:
+  elastic_search:
+
+services:
+  # Elastic Search 9.0.4
+  # -----------------------------------------------------------
+  #
+  elastic_search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.0.4
+    networks:
+      - elastic_search
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager # Placing in manager since we only have one (manager) node.
+
+  # Kibana 9.0.4
+  # -----------------------------------------------------------
+  #
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.0.4
+    environment:
+      ELASTICSEARCH_URL: http://elastic_search_elastic_search:9200
+    networks:
+      - elastic_search
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager # Placing in manager since we only have one (manager) node.
